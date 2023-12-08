@@ -6,7 +6,8 @@ namespace StockAppWebApi.Models
     public class EducationalResource
     {
         [Key]
-        public int Id { get; set; }
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int Id { get; set; }
 
         [Required]
         [StringLength(255)]

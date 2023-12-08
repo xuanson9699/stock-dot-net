@@ -6,7 +6,8 @@ namespace StockAppWebApi.Models
     public class Quote
     {
         [Key]
-        public int Id { get; set; }
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int Id { get; set; }
 
         [ForeignKey("Stock")]
         public int StockId { get; set; }

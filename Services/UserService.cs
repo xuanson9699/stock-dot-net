@@ -22,11 +22,6 @@ namespace StockAppWebApi.Services
             return user;
         }
 
-        //public async Task<string> Login(LoginViewModel loginViewModel)
-        //{
-        //    // Thực hiện thêm mới user
-        //    return await _userRepository.Login(loginViewModel);
-        //}
         public async Task<User?> Register(RegisterViewModel registerViewModel)
         {
             // Kiểm tra xem username hoặc email đã tồn tại trong database chưa
@@ -45,13 +40,19 @@ namespace StockAppWebApi.Services
             return await _userRepository.Create(registerViewModel);
         }
 
-        public async Task<string?> Login(LoginViewModel loginViewModel)
+        public async Task<string> Login(LoginViewModel loginViewModel)
         {
             return await _userRepository.Login(loginViewModel);
         }
         public async Task<bool> DeleteUserById(int useId)
         {
             return await _userRepository.DeleteUserById(useId);
+        }
+
+        public async Task<PagingResultViewModel<User>> GetUsers(SearchUserViewModel searchUserViewModel)
+        {
+            // Gọi UserRepository để lấy danh sách user
+            return await _userRepository.GetUsers(searchUserViewModel);
         }
 
     }

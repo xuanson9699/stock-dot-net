@@ -8,7 +8,8 @@ namespace StockAppWebApi.Models
     public class Etf
     {
         [Key]
-        public int EtfId { get; set; }
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int EtfId { get; set; }
 
         [Required]
         [StringLength(255)]

@@ -10,7 +10,8 @@ namespace StockAppWebApi.Models
     public class Stock
     {
         [Key]
-        public int StockId { get; set; }
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int StockId { get; set; }
 
         [Required]
         [StringLength(10, MinimumLength = 1)]

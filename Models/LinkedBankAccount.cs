@@ -6,8 +6,8 @@ namespace StockAppWebApi.Models
     public class LinkedBankAccount
     {
         [Key]
-       
-        public int AccountId { get; set; }
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int AccountId { get; set; }
 
         [Required]
         [ForeignKey("User")]

@@ -12,7 +12,7 @@ namespace StockAppWebApi.Services
         Task<string> Login(LoginViewModel loginViewModel);
 
         Task<bool> DeleteUserById(int userId);
-        //jwt string
-        //Task<string> Login(LoginViewModel loginViewModel);
+
+        Task<PagingResultViewModel<User>> GetUsers(SearchUserViewModel searchUserViewModel);
     }
 }

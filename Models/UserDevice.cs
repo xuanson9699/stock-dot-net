@@ -8,7 +8,8 @@ namespace StockAppWebApi.Models
     public class UserDevice
     {
         [Key]
-        public int Id { get; set; }
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int Id { get; set; }
 
         [Required]
         [ForeignKey("User")]

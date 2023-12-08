@@ -74,3 +74,4 @@ E:\back-end\StockAppWebApi\obj\Debug\net7.0\refint\StockAppWebApi.dll
 E:\back-end\StockAppWebApi\obj\Debug\net7.0\StockAppWebApi.pdb
 E:\back-end\StockAppWebApi\obj\Debug\net7.0\StockAppWebApi.genruntimeconfig.cache
 E:\back-end\StockAppWebApi\obj\Debug\net7.0\ref\StockAppWebApi.dll
+E:\back-end\StockAppWebApi\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

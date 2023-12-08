@@ -6,7 +6,8 @@ namespace StockAppWebApi.Models
     public class IndexConstituent
     {
         [Key]
-        public int Id { get; set; }
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int Id { get; set; }
 
         [ForeignKey("MarketIndex")]
         public int IndexId { get; set; }

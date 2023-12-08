@@ -3,6 +3,7 @@ using StockAppWebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using StockAppWebApi.Models;
 using StockAppWebApi.ViewModels;
+using StockAppWebApi.Attributes;
 
 namespace StockAppWebApi.Controllers
 {
@@ -37,7 +38,7 @@ namespace StockAppWebApi.Controllers
             try
             {
                 var jwt = await _userService.Login(loginViewModel);
-                return Ok(jwt);
+                return Ok(new { jwt });
 
             }
             catch (ArgumentException ex)
@@ -47,6 +48,7 @@ namespace StockAppWebApi.Controllers
         }
 
         [HttpDelete("{userId}")]
+        [JwtAuthorize]
         public async Task<IActionResult> DeleteUserById(int userId)
         {
             var result = await _userService.DeleteUserById(userId);
@@ -60,18 +62,20 @@ namespace StockAppWebApi.Controllers
                 return NotFound(new { Message = "User not found." });
             }
         }
-        //[HttpPost("login")]
-        //public async Task<IActionResult> Login(LoginViewModel loginViewModel)
-        //{
-        //    try
-        //    {
-        //        string jwtToken = await _userService.Login(loginViewModel);
-        //        return Ok(new { jwtToken });
-        //    }
-        //    catch (ArgumentException ex)
-        //    {
-        //        return BadRequest(new { Message = ex.Message });
-        //    }
-        //}
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetUsers([FromQuery] SearchUserViewModel searchUserViewModel)
+        {
+            try
+            {
+                var data = await _userService.GetUsers(searchUserViewModel);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

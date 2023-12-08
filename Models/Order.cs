@@ -6,7 +6,8 @@ namespace StockAppWebApi.Models
     public class Order
     {
         [Key]
-        public int Id { get; set; }
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int Id { get; set; }
 
         [ForeignKey("User")]
         public int UserId { get; set; }

@@ -7,7 +7,8 @@ namespace StockAppWebApi.Models
     public class Portfolio
     {
         [Key]
-        public int Id { get; set; }
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int Id { get; set; }
 
         [Required]
         [ForeignKey("User")]

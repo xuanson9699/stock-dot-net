@@ -11,6 +11,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Security.Cryptography;
 using StockAppWebApi.Untils;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 //using StockAppWebApi.Repository;
 
 namespace StockAppWebApi.Repositories
@@ -73,10 +75,41 @@ namespace StockAppWebApi.Repositories
 
             return newUser;
         }
-        //public async Task<string> Login(LoginViewModel loginViewModel)
-        //{
-        //    return "";
-        //}
+
+        public async Task<PagingResultViewModel<User>> GetUsers(SearchUserViewModel searchUserViewModel)
+        {
+            IQueryable<User> query = _context.Users;
+            if (!string.IsNullOrEmpty(searchUserViewModel.SearchTerm))
+            {
+                query = query.Where(u => u.Username.Contains(searchUserViewModel.SearchTerm) || u.Email.Contains(searchUserViewModel.SearchTerm));
+            }
+
+            var totalItems = await query.CountAsync();
+
+            // Sắp xếp theo một trường nào đó (ví dụ: theo ID tăng dần).
+            query = query.OrderBy(u => u.Id);
+
+            // Phân trang: Skip() và Take().
+            query = query.Skip((searchUserViewModel.PageIndex - 1) * searchUserViewModel.PageSize).Take(searchUserViewModel.PageSize);
+
+            // Thực hiện truy vấn và chuyển đổi kết quả thành danh sách.
+
+
+            var users = await query.ToListAsync();
+
+            var pageNumber = searchUserViewModel.PageIndex;
+            var pageSize = searchUserViewModel.PageSize;
+
+            var pagingResult = new PagingResultViewModel<User>(
+            users,
+            totalItems,
+            pageNumber,
+            pageSize
+        );
+
+            return pagingResult;
+        }
+
         public async Task<string> Login(LoginViewModel loginViewModel)
         {
 
@@ -86,13 +119,17 @@ namespace StockAppWebApi.Repositories
             //{
             //    throw new ArgumentException("Username does not exists");
             //}
-            string sql = "EXECUTE dbo.CheckLogin @email, @password";
-            IEnumerable<User> result = await _context.Users.FromSqlRaw(sql,
-                        new SqlParameter("@email", loginViewModel.Email),
-                        new SqlParameter("@password", loginViewModel.Password))
-                .ToListAsync();
+            //string sql = "EXECUTE dbo.CheckLogin @email, @password";
+            //IEnumerable<User> result = await _context.Users.FromSqlRaw(sql,
+            //            new SqlParameter("@email", loginViewModel.Email),
+            //            new SqlParameter("@password", loginViewModel.Password))
+            //    .ToListAsync();
 
-            User? user = result.FirstOrDefault();
+            //User? user = result.FirstOrDefault();
+            string hashedPassword = HashUntils.HashPassword(loginViewModel.Password);
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginViewModel.Email && u.HashedPassword == hashedPassword);
+
             if (user != null)
             {
                 //tạo ra jwt string để gửi cho client
@@ -103,7 +140,8 @@ namespace StockAppWebApi.Repositories
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                        //Đoạn truyền thông tin vào token
+                        new Claim("USER_ID", user.Id.ToString()),
                     }),
                     Expires = DateTime.UtcNow.AddDays(30),
                     SigningCredentials = new SigningCredentials

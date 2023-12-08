@@ -15,6 +15,8 @@ namespace StockAppWebApi.Repositories
         Task<string> Login(LoginViewModel loginViewModel);
 
         Task<bool> DeleteUserById(int id);
+
+        Task<PagingResultViewModel<User>> GetUsers(SearchUserViewModel searchUserViewModel);
         //Task<string> Login(LoginViewModel loginViewModel);
     }
 }
